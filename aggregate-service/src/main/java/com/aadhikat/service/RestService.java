@@ -32,7 +32,7 @@ public class RestService {
         final ReactorResourceFactory reactorResourceFactory = new ReactorResourceFactory();
         reactorResourceFactory.setConnectionProvider(
                 ConnectionProvider.builder("prism-cp")
-                        .maxConnections(10)
+                        .maxConnections(1000)
                         .build());
 
         return HttpClient.create(reactorResourceFactory.getConnectionProvider())

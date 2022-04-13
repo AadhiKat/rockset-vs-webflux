@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class RestController {
 
     @GetMapping("rest/square/{input}")
-    public Mono<Integer> findSquare(@PathVariable Mono<Integer> input) {
-        return input.delayElement(Duration.of(2, ChronoUnit.MILLIS));
+    public Mono<Integer> findSquare(@PathVariable Integer input) {
+        return Mono.just(input).delayElement(Duration.of(2, ChronoUnit.MILLIS));
     }
 }
