@@ -5,12 +5,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
+import java.util.concurrent.TimeUnit;
+
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("rest-service")
 public class RestController {
 
     @GetMapping("rest/square/{input}")
-    public Mono<Integer> findSquare(@PathVariable int input) {
-        return Mono.just(input * input);
+    public Mono<Integer> findSquare(@PathVariable Mono<Integer> input) {
+        return input.delayElement(Duration.of(2, ChronoUnit.MILLIS));
     }
 }
