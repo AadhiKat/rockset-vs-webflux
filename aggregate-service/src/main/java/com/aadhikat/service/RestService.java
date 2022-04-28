@@ -12,12 +12,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
-import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 import javax.annotation.PostConstruct;
 import java.time.Duration;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -44,22 +42,36 @@ public class RestService {
     }
 
     @PostConstruct
-    private void init(){
+    private void init() {
         this.webClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(getHttpClientFactory()))
                 .baseUrl(url)
                 .build();
     }
 
-    public Mono<Map<Integer, Integer>> requestResponse(int input){
+    public Mono<Void> requestResponseV1(int input) {
         return Flux.range(1, input)
-                .flatMap(i ->  this.webClient
+                .flatMap(i -> this.webClient
                         .get()
-                        .uri("{input}", i)
+                        .uri("v1/{input}", i)
                         .retrieve()
                         .bodyToMono(Integer.class)
                         .map(k -> Tuples.of(i, k))
                 )
-                .collectMap(Tuple2::getT1, Tuple2::getT2);
+                .then()
+                .doOnNext(System.out::println);
     }
+
+//    public Mono<Void> requestResponseV2(int input) {
+//        return Flux.range(1, input)
+//                .flatMap(i -> this.webClient
+//                        .get()
+//                        .uri("v2/{input}", i)
+//                        .retrieve()
+//                        .bodyToMono(Integer.class)
+//                        .map(k -> Tuples.of(i, k))
+//                )
+//                .then()
+//                .doOnNext(System.out::println);
+//    }
 }
