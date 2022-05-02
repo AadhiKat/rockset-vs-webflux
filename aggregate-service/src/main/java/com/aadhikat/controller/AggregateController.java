@@ -37,6 +37,11 @@ public class AggregateController {
         return this.rSocketService.fireAndForgetMonoV1(input);
     }
 
+    @GetMapping("rsocket/send/v2/{input}")
+    public Mono<Void> rsocketSendFFV2(@PathVariable int input) {
+        return this.rSocketService.fireAndForgetMonoV2(input);
+    }
+
 //    @GetMapping("rsocket/send/v2/{input}")
 //    public Mono<Void> rsocketSendFFV2(@PathVariable int input) {
 //        return this.rSocketService.fireAndForgetMonoV2(input);

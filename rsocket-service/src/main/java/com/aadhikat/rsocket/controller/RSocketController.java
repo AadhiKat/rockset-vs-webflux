@@ -37,6 +37,12 @@ public class RSocketController {
     }
 
 
+    @MessageMapping("ff.send.v2.{input}")
+    public Mono<Void> findSquare(@DestinationVariable FakeProducerDTO input) {
+        return service.send(input);
+    }
+
+
 //    @MessageMapping("ff.send.v2")
 //    public Mono<Void> sendV2(Mono<Integer> integerMono) {
 //        integerMono

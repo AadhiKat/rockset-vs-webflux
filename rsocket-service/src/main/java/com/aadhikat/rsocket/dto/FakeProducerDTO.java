@@ -2,7 +2,6 @@ package com.aadhikat.rsocket.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JsonRootName("FakeProducer")
 public class FakeProducerDTO {
 
     @JsonProperty("id")

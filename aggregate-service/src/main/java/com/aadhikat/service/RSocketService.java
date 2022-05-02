@@ -1,5 +1,6 @@
 package com.aadhikat.service;
 
+import com.aadhikat.dto.FakeProducerDTO;
 import io.rsocket.transport.netty.client.TcpClientTransport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,6 +52,16 @@ public class RSocketService {
                 .flatMap(i -> this.requester
                         .route("ff.send.v1")
                         .data(i)
+                        .send()
+                )
+                .then();
+    }
+
+    public Mono<Void> fireAndForgetMonoV2(int input) {
+        return Flux.range(1, input)
+                .doOnNext(System.out::println)
+                .flatMap(i -> this.requester
+                        .route("ff.send.v2.{input}" , FakeProducerDTO.builder().id(String.valueOf(i)).build())
                         .send()
                 )
                 .then();

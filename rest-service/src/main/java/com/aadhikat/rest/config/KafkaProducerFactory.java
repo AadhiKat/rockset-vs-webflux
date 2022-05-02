@@ -52,6 +52,11 @@ public class KafkaProducerFactory {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.ACKS_CONFIG, "1");
+        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 65536);
+        props.put(ProducerConfig.LINGER_MS_CONFIG, 5);
+        props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 5);
+        props.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, 5242880);
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, false);
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, securityProtocol);
         props.put(SaslConfigs.SASL_MECHANISM, securitySaslMechanism);
@@ -62,7 +67,7 @@ public class KafkaProducerFactory {
                 .stopOnError(false);
     }
 
-    private SenderOptions getLocalSenderOptions(){
+    private SenderOptions getLocalSenderOptions() {
         Map<String, Object> producerProps = new HashMap<>();
         producerProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -81,10 +86,14 @@ public class KafkaProducerFactory {
                 .stopOnError(false);
     }
 
-    KafkaSender<String, String> sender = KafkaSender.create(getSenderOptions());
+    KafkaSender<String, String> sender;
 
     public Mono<KafkaSender<String, String>> getKafkaSender() {
         try {
+
+            if (sender == null)
+                sender = KafkaSender.create(getSenderOptions());
+
             return Mono.just(sender);
         } catch (Exception e) {
             log.error("Kafka create failed");

@@ -1,8 +1,7 @@
 package com.aadhikat.rest.dto;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JsonRootName("FakeProducer")
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FakeProducerDTO {
 
     @JsonProperty("id")
